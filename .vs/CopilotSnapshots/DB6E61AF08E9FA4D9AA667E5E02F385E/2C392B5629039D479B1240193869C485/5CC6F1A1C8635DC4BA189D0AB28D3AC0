@@ -1,0 +1,407 @@
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Input;
+using MidnightClub3AudioModder.Models;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+
+namespace MidnightClub3AudioModder.ViewModels
+{
+    public class MainViewModel : INotifyPropertyChanged
+    {
+        private ObservableCollection<StreamInfo> _streams;
+        private StreamInfo _selectedStream;
+        private string _statusMessage;
+        private string _streamsDatPath;
+        private string _jsonConfigPath;
+        private byte[] _streamsDatData;
+        private bool _isDataLoaded;
+        private string _searchText;
+
+        public ObservableCollection<StreamInfo> Streams
+        {
+            get => _streams;
+            set
+            {
+                _streams = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public StreamInfo SelectedStream
+        {
+            get => _selectedStream;
+            set
+            {
+                _selectedStream = value;
+                OnPropertyChanged();
+                if (_selectedStream != null && _streamsDatData != null)
+                {
+                    LoadStreamData();
+                }
+            }
+        }
+
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set
+            {
+                _statusMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                FilterStreams();
+            }
+        }
+
+        public bool IsDataLoaded
+        {
+            get => _isDataLoaded;
+            set
+            {
+                _isDataLoaded = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand LoadJsonCommand { get; }
+        public ICommand LoadStreamsDatCommand { get; }
+        public ICommand ReplaceDataCommand { get; }
+        public ICommand ExportStreamCommand { get; }
+        public ICommand SaveChangesCommand { get; }
+
+        private ObservableCollection<StreamInfo> _allStreams;
+
+        public MainViewModel()
+        {
+            Streams = new ObservableCollection<StreamInfo>();
+            _allStreams = new ObservableCollection<StreamInfo>();
+            
+            LoadJsonCommand = new RelayCommand(LoadJson);
+            LoadStreamsDatCommand = new RelayCommand(LoadStreamsDat);
+            ReplaceDataCommand = new RelayCommand(ReplaceData, CanReplaceData);
+            ExportStreamCommand = new RelayCommand(ExportStream, CanExportStream);
+            SaveChangesCommand = new RelayCommand(SaveChanges, CanSaveChanges);
+
+            StatusMessage = "Bem-vindo! Carregue o arquivo JSON de configuração para começar.";
+            
+            // Tenta carregar automaticamente se os arquivos existirem
+            AutoLoadFiles();
+        }
+
+        private void AutoLoadFiles()
+        {
+            try
+            {
+                string exeDir = AppDomain.CurrentDomain.BaseDirectory;
+                string jsonPath = Path.Combine(exeDir, "streams.json");
+                string datPath = Path.Combine(exeDir, "streams.dat");
+
+                if (File.Exists(jsonPath))
+                {
+                    _jsonConfigPath = jsonPath;
+                    LoadJsonFromPath(jsonPath);
+                }
+
+                if (File.Exists(datPath) && _allStreams.Count > 0)
+                {
+                    _streamsDatPath = datPath;
+                    LoadStreamsDatFromPath(datPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro no carregamento automático: {ex.Message}";
+            }
+        }
+
+        private void LoadJson(object parameter)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                Title = "Selecione o arquivo JSON de configuração"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                _jsonConfigPath = openFileDialog.FileName;
+                LoadJsonFromPath(openFileDialog.FileName);
+            }
+        }
+
+        private void LoadJsonFromPath(string filePath)
+        {
+            try
+            {
+                string jsonContent = File.ReadAllText(filePath);
+                var streamsData = JsonConvert.DeserializeObject<StreamsData>(jsonContent);
+
+                _allStreams.Clear();
+                Streams.Clear();
+
+                foreach (var stream in streamsData.Streams)
+                {
+                    _allStreams.Add(stream);
+                    Streams.Add(stream);
+                }
+
+                StatusMessage = $"JSON carregado: {streamsData.TotalStreams} streams encontradas";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro ao carregar JSON: {ex.Message}";
+                MessageBox.Show($"Erro ao carregar JSON: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadStreamsDat(object parameter)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "DAT files (*.dat)|*.dat|All files (*.*)|*.*",
+                Title = "Selecione o arquivo streams.dat"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                _streamsDatPath = openFileDialog.FileName;
+                LoadStreamsDatFromPath(openFileDialog.FileName);
+            }
+        }
+
+        private void LoadStreamsDatFromPath(string filePath)
+        {
+            try
+            {
+                _streamsDatData = File.ReadAllBytes(filePath);
+                IsDataLoaded = true;
+                StatusMessage = $"streams.dat carregado: {FormatFileSize(_streamsDatData.Length)}";
+                
+                if (SelectedStream != null)
+                {
+                    LoadStreamData();
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro ao carregar streams.dat: {ex.Message}";
+                MessageBox.Show($"Erro ao carregar streams.dat: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadStreamData()
+        {
+            try
+            {
+                if (_streamsDatData == null || SelectedStream == null) return;
+
+                long offset = SelectedStream.OffsetDecimal;
+                long size = Math.Min(SelectedStream.Size, 1024); // Mostra apenas os primeiros 1KB para preview
+
+                if (offset + size > _streamsDatData.Length)
+                {
+                    StatusMessage = "Offset além do tamanho do arquivo";
+                    return;
+                }
+
+                byte[] data = new byte[size];
+                Array.Copy(_streamsDatData, offset, data, 0, size);
+                SelectedStream.CurrentData = BitConverter.ToString(data).Replace("-", " ");
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro ao ler dados da stream: {ex.Message}";
+            }
+        }
+
+        private bool CanReplaceData(object parameter)
+        {
+            return SelectedStream != null && _streamsDatData != null;
+        }
+
+        private void ReplaceData(object parameter)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "All files (*.*)|*.*",
+                Title = "Selecione o arquivo para substituir os dados"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    byte[] newData = File.ReadAllBytes(openFileDialog.FileName);
+                    
+                    if (newData.Length > SelectedStream.Size)
+                    {
+                        var result = MessageBox.Show(
+                            $"O arquivo selecionado ({FormatFileSize(newData.Length)}) é maior que o tamanho da stream ({SelectedStream.SizeFormatted}).\n\n" +
+                            "Deseja continuar? Os dados serão truncados.",
+                            "Aviso",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning);
+
+                        if (result != MessageBoxResult.Yes)
+                            return;
+
+                        Array.Resize(ref newData, (int)SelectedStream.Size);
+                    }
+                    else if (newData.Length < SelectedStream.Size)
+                    {
+                        var result = MessageBox.Show(
+                            $"O arquivo selecionado ({FormatFileSize(newData.Length)}) é menor que o tamanho da stream ({SelectedStream.SizeFormatted}).\n\n" +
+                            "Deseja continuar? Os dados restantes serão preenchidos com zeros.",
+                            "Aviso",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning);
+
+                        if (result != MessageBoxResult.Yes)
+                            return;
+
+                        byte[] paddedData = new byte[SelectedStream.Size];
+                        Array.Copy(newData, paddedData, newData.Length);
+                        newData = paddedData;
+                    }
+
+                    Array.Copy(newData, 0, _streamsDatData, SelectedStream.OffsetDecimal, newData.Length);
+                    LoadStreamData();
+                    StatusMessage = $"Dados substituídos com sucesso em {SelectedStream.Name}";
+                }
+                catch (Exception ex)
+                {
+                    StatusMessage = $"Erro ao substituir dados: {ex.Message}";
+                    MessageBox.Show($"Erro ao substituir dados: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private bool CanExportStream(object parameter)
+        {
+            return SelectedStream != null && _streamsDatData != null;
+        }
+
+        private void ExportStream(object parameter)
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "All files (*.*)|*.*",
+                FileName = SelectedStream.Name,
+                Title = "Exportar dados da stream"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    byte[] data = new byte[SelectedStream.Size];
+                    Array.Copy(_streamsDatData, SelectedStream.OffsetDecimal, data, 0, SelectedStream.Size);
+                    File.WriteAllBytes(saveFileDialog.FileName, data);
+                    StatusMessage = $"Stream exportada com sucesso: {saveFileDialog.FileName}";
+                }
+                catch (Exception ex)
+                {
+                    StatusMessage = $"Erro ao exportar stream: {ex.Message}";
+                    MessageBox.Show($"Erro ao exportar stream: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private bool CanSaveChanges(object parameter)
+        {
+            return _streamsDatData != null && !string.IsNullOrEmpty(_streamsDatPath);
+        }
+
+        private void SaveChanges(object parameter)
+        {
+            try
+            {
+                var result = MessageBox.Show(
+                    "Deseja salvar as alterações no arquivo streams.dat?\n\n" +
+                    "Um backup será criado automaticamente.",
+                    "Confirmar salvamento",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result != MessageBoxResult.Yes)
+                    return;
+
+                // Criar backup
+                string backupPath = _streamsDatPath + ".backup_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                File.Copy(_streamsDatPath, backupPath, true);
+
+                // Salvar arquivo modificado
+                File.WriteAllBytes(_streamsDatPath, _streamsDatData);
+                
+                StatusMessage = $"Alterações salvas! Backup criado: {Path.GetFileName(backupPath)}";
+                MessageBox.Show("Alterações salvas com sucesso!\n\nBackup criado: " + Path.GetFileName(backupPath), 
+                    "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro ao salvar: {ex.Message}";
+                MessageBox.Show($"Erro ao salvar: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void FilterStreams()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                Streams.Clear();
+                foreach (var stream in _allStreams)
+                {
+                    Streams.Add(stream);
+                }
+            }
+            else
+            {
+                var filtered = _allStreams.Where(s => 
+                    s.Name.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    s.Offset.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
+                ).ToList();
+
+                Streams.Clear();
+                foreach (var stream in filtered)
+                {
+                    Streams.Add(stream);
+                }
+            }
+        }
+
+        private string FormatFileSize(long bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB" };
+            double len = bytes;
+            int order = 0;
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len = len / 1024;
+            }
+            return $"{len:0.##} {sizes[order]}";
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}

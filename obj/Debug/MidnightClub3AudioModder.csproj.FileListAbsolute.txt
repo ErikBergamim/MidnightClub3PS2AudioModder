@@ -1,0 +1,16 @@
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder.csproj.AssemblyReference.cache
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MainWindow.g.cs
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\App.g.cs
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder_MarkupCompile.cache
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder_MarkupCompile.lref
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\bin\Debug\MidnightClub3AudioModder.exe.config
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\bin\Debug\MidnightClub3AudioModder.exe
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\bin\Debug\MidnightClub3AudioModder.pdb
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MainWindow.baml
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder.g.resources
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder.Properties.Resources.resources
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder.csproj.GenerateResource.cache
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder.csproj.CoreCompileInputs.cache
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder.exe
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder.pdb
+C:\Users\Erik\source\repos\MidnightClub3AudioModder\obj\Debug\MidnightClub3AudioModder_Content.g.cs

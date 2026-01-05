@@ -1,0 +1,112 @@
+﻿#!/usr/bin/env python3
+"""
+rstm_build.py - Exemplo de estrutura para converter WAV para RSM
+
+Este é um exemplo de estrutura. O script real deve ser fornecido
+pelo desenvolvedor ou obtido do projeto original.
+
+Uso: python rstm_build.py input.wav output.rsm loopstart
+
+Parâmetros:
+    input.wav  - Arquivo WAV de entrada
+    output.rsm - Arquivo RSM de saída
+    loopstart  - Ponto de início do loop (em samples, geralmente 0)
+
+Saída: Cria o arquivo output.rsm
+"""
+
+import sys
+import os
+import struct
+import wave
+
+def build_rsm(wav_path, rsm_path, loopstart=0):
+    """
+    Converte um arquivo WAV para formato RSM.
+    
+    Args:
+        wav_path: Caminho para o arquivo WAV de entrada
+        rsm_path: Caminho para o arquivo RSM de saída
+        loopstart: Ponto de início do loop em samples (padrão: 0)
+    """
+    if not os.path.exists(wav_path):
+        print(f"Erro: Arquivo não encontrado: {wav_path}")
+        sys.exit(1)
+    
+    # Lê o arquivo WAV
+    try:
+        with wave.open(wav_path, 'rb') as wav:
+            # Obtém informações do WAV
+            channels = wav.getnchannels()
+            sample_width = wav.getsampwidth()
+            framerate = wav.getframerate()
+            n_frames = wav.getnframes()
+            
+            print(f"WAV Info:")
+            print(f"  Canais: {channels}")
+            print(f"  Sample Rate: {framerate} Hz")
+            print(f"  Sample Width: {sample_width} bytes")
+            print(f"  Frames: {n_frames}")
+            print(f"  Loop Start: {loopstart}")
+            
+            # Lê os dados de áudio
+            audio_data = wav.readframes(n_frames)
+    except Exception as e:
+        print(f"Erro ao ler arquivo WAV: {e}")
+        sys.exit(1)
+    
+    # Cria o arquivo RSM
+    try:
+        with open(rsm_path, 'wb') as rsm:
+            # Header RSM (exemplo simplificado)
+            # Magic "RSTM"
+            rsm.write(b'RSTM')
+            
+            # Flags/Version (4 bytes)
+            rsm.write(struct.pack('<I', 0))
+            
+            # Sample Rate (4 bytes, little endian)
+            rsm.write(struct.pack('<I', framerate))
+            
+            # Channels (2 bytes, little endian)
+            rsm.write(struct.pack('<H', channels))
+            
+            # Reserved (2 bytes)
+            rsm.write(struct.pack('<H', 0))
+            
+            # Loop Start (4 bytes, little endian) - pode ser necessário ajustar posição
+            rsm.write(struct.pack('<I', loopstart))
+            
+            # TODO: Adicionar header adicional conforme especificação RSM
+            # Este é apenas um exemplo básico
+            
+            # Dados de áudio
+            rsm.write(audio_data)
+            
+        print(f"✅ Arquivo RSM criado: {rsm_path}")
+        print(f"   Tamanho: {os.path.getsize(rsm_path)} bytes")
+        
+    except Exception as e:
+        print(f"Erro ao criar arquivo RSM: {e}")
+        sys.exit(1)
+
+def main():
+    if len(sys.argv) != 4:
+        print("usage: rstm_build.py [IN] <-> [OUTPUT] [IF] [4-> [LOOPSTART] [4= [REBUID] path")
+        print("")
+        print("Uso: python rstm_build.py input.wav output.rsm loopstart")
+        print("")
+        print("Parâmetros:")
+        print("  input.wav  - Arquivo WAV de entrada")
+        print("  output.rsm - Arquivo RSM de saída")
+        print("  loopstart  - Ponto de início do loop (0 = sem loop)")
+        sys.exit(1)
+    
+    wav_path = sys.argv[1]
+    rsm_path = sys.argv[2]
+    loopstart = int(sys.argv[3])
+    
+    build_rsm(wav_path, rsm_path, loopstart)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,18 @@
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+namespace MidnightClub3AudioModder.Models
+{
+    [DataContract]
+    public sealed class StreamIndex
+    {
+        [DataMember(Name = "source_file")]
+        public string SourceFile { get; set; }
+
+        [DataMember(Name = "total_streams")]
+        public int TotalStreams { get; set; }
+
+        [DataMember(Name = "streams")]
+        public List<StreamEntry> Streams { get; set; }
+    }
+}

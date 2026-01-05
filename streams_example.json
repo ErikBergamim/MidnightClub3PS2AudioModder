@@ -1,0 +1,41 @@
+{
+  "source_file": "streams.dat",
+  "total_streams": 5,
+  "streams": [
+    {
+      "name": "stream_001",
+      "offset": "0x00006800",
+      "offset_decimal": 26624,
+      "size": 641024,
+      "size_hex": "0x0009C800"
+    },
+    {
+      "name": "stream_002",
+      "offset": "0x000A3000",
+      "offset_decimal": 667648,
+      "size": 524288,
+      "size_hex": "0x00080000"
+    },
+    {
+      "name": "stream_003",
+      "offset": "0x00123000",
+      "offset_decimal": 1191936,
+      "size": 458752,
+      "size_hex": "0x00070000"
+    },
+    {
+      "name": "stream_004",
+      "offset": "0x00193000",
+      "offset_decimal": 1650688,
+      "size": 327680,
+      "size_hex": "0x00050000"
+    },
+    {
+      "name": "stream_005",
+      "offset": "0x001E3000",
+      "offset_decimal": 1978368,
+      "size": 262144,
+      "size_hex": "0x00040000"
+    }
+  ]
+}

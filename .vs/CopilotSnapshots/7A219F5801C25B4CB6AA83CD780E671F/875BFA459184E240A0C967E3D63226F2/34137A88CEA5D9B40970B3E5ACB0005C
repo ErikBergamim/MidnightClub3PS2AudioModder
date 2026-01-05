@@ -1,0 +1,11 @@
+﻿using System.Collections.Generic;
+
+namespace MidnightClub3AudioModder.Models
+{
+    public sealed class StreamIndex
+    {
+        public string SourceFile { get; set; }
+        public int TotalStreams { get; set; }
+        public List<StreamEntry> Streams { get; set; }
+    }
+}

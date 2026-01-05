@@ -1,0 +1,106 @@
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
+
+namespace MidnightClub3AudioModder.Models
+{
+    public class StreamInfo : INotifyPropertyChanged
+    {
+        private string _name;
+        private string _offset;
+        private long _offsetDecimal;
+        private long _size;
+        private string _sizeHex;
+        private string _currentData;
+
+        [JsonProperty("name")]
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [JsonProperty("offset")]
+        public string Offset
+        {
+            get => _offset;
+            set
+            {
+                _offset = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [JsonProperty("offset_decimal")]
+        public long OffsetDecimal
+        {
+            get => _offsetDecimal;
+            set
+            {
+                _offsetDecimal = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [JsonProperty("size")]
+        public long Size
+        {
+            get => _size;
+            set
+            {
+                _size = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [JsonProperty("size_hex")]
+        public string SizeHex
+        {
+            get => _sizeHex;
+            set
+            {
+                _sizeHex = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [JsonIgnore]
+        public string CurrentData
+        {
+            get => _currentData;
+            set
+            {
+                _currentData = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [JsonIgnore]
+        public string SizeFormatted => FormatFileSize(Size);
+
+        private string FormatFileSize(long bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB" };
+            double len = bytes;
+            int order = 0;
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len = len / 1024;
+            }
+            return $"{len:0.##} {sizes[order]}";
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}

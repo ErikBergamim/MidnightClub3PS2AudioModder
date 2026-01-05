@@ -1,0 +1,22 @@
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace MidnightClub3AudioModder.Models
+{
+    public class StreamsData
+    {
+        [JsonProperty("source_file")]
+        public string SourceFile { get; set; }
+
+        [JsonProperty("total_streams")]
+        public int TotalStreams { get; set; }
+
+        [JsonProperty("streams")]
+        public List<StreamInfo> Streams { get; set; }
+
+        public StreamsData()
+        {
+            Streams = new List<StreamInfo>();
+        }
+    }
+}

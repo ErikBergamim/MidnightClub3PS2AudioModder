@@ -1,0 +1,359 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|c:\\users\\erik\\source\\repos\\midnightclub3audiomodder\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Erik\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-af616edb-e908-4dfa-9aa6-67e5e02f385e.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\packages.config||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:packages.config||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|c:\\users\\erik\\source\\repos\\midnightclub3audiomodder\\installation_checklist.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:installation_checklist.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\helpers\\simplejsonparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:helpers\\simplejsonparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\services\\jsonindexloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:services\\jsonindexloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|c:\\users\\erik\\source\\repos\\midnightclub3audiomodder\\replacement_flow.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:replacement_flow.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|c:\\users\\erik\\source\\repos\\midnightclub3audiomodder\\rstm_build_example.py||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:rstm_build_example.py||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\services\\streamsdatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:services\\streamsdatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\models\\streaminfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:models\\streaminfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Erik\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-589f217a-c201-4c5b-b6aa-83cd780e671f.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\models\\streamsdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:models\\streamsdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\viewmodels\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:viewmodels\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\services\\streamsdatpatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:services\\streamsdatpatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|c:\\users\\erik\\source\\repos\\midnightclub3audiomodder\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\streams_example.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:streams_example.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\batch_replace_guide.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{AE210248-E71D-410E-9F33-0C4C21593354}|MidnightClub3AudioModder.csproj|solutionrelative:batch_replace_guide.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "BATCH_REPLACE_GUIDE.md",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\BATCH_REPLACE_GUIDE.md",
+              "RelativeDocumentMoniker": "BATCH_REPLACE_GUIDE.md",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\BATCH_REPLACE_GUIDE.md",
+              "RelativeToolTip": "BATCH_REPLACE_GUIDE.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF4BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-01-05T20:37:38.205Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "packages.config",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\packages.config",
+              "RelativeDocumentMoniker": "packages.config",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\packages.config",
+              "RelativeToolTip": "packages.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2026-01-05T14:31:33.971Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:26:38.438Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\App.xaml.cs",
+              "RelativeDocumentMoniker": "App.xaml.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\App.xaml.cs",
+              "RelativeToolTip": "App.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:26:50.9Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-05T14:26:41.631Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\ViewModels\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\MainViewModel.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\ViewModels\\MainViewModel.cs",
+              "RelativeToolTip": "ViewModels\\MainViewModel.cs",
+              "ViewState": "AgIAAPMBAAAAAAAAAAAAAA0CAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:28:38.494Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "plan-af616edb-e908-4dfa-9aa6-67e5e02f385e.md",
+              "DocumentMoniker": "C:\\Users\\Erik\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-af616edb-e908-4dfa-9aa6-67e5e02f385e.md",
+              "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-af616edb-e908-4dfa-9aa6-67e5e02f385e.md",
+              "ToolTip": "C:\\Users\\Erik\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-af616edb-e908-4dfa-9aa6-67e5e02f385e.md [Somente Leitura]",
+              "RelativeToolTip": "..\\..\\..\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-af616edb-e908-4dfa-9aa6-67e5e02f385e.md [Somente Leitura]",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-01-05T14:27:13.093Z",
+              "EditorCaption": " [Somente Leitura]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "INSTALLATION_CHECKLIST.md",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\INSTALLATION_CHECKLIST.md",
+              "RelativeDocumentMoniker": "INSTALLATION_CHECKLIST.md",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\INSTALLATION_CHECKLIST.md",
+              "RelativeToolTip": "INSTALLATION_CHECKLIST.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-01-05T15:20:48.201Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SimpleJsonParser.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Helpers\\SimpleJsonParser.cs",
+              "RelativeDocumentMoniker": "Helpers\\SimpleJsonParser.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Helpers\\SimpleJsonParser.cs",
+              "RelativeToolTip": "Helpers\\SimpleJsonParser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:32:27.286Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "JsonIndexLoader.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Services\\JsonIndexLoader.cs",
+              "RelativeDocumentMoniker": "Services\\JsonIndexLoader.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Services\\JsonIndexLoader.cs",
+              "RelativeToolTip": "Services\\JsonIndexLoader.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:33:54.393Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "REPLACEMENT_FLOW.md",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\REPLACEMENT_FLOW.md",
+              "RelativeDocumentMoniker": "REPLACEMENT_FLOW.md",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\REPLACEMENT_FLOW.md",
+              "RelativeToolTip": "REPLACEMENT_FLOW.md",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAQwIIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-01-05T15:19:23.056Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "rstm_build_example.py",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\rstm_build_example.py",
+              "RelativeDocumentMoniker": "rstm_build_example.py",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\rstm_build_example.py",
+              "RelativeToolTip": "rstm_build_example.py",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAUwGUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
+              "WhenOpened": "2026-01-05T15:19:38.574Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "StreamsDatService.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Services\\StreamsDatService.cs",
+              "RelativeDocumentMoniker": "Services\\StreamsDatService.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Services\\StreamsDatService.cs",
+              "RelativeToolTip": "Services\\StreamsDatService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:33:58.917Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\README.md",
+              "RelativeDocumentMoniker": "README.md",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\README.md",
+              "RelativeToolTip": "README.md",
+              "ViewState": "AgIAAJ8AAAAAAAAAAIBJwKEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-01-05T14:49:56.972Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "streams_example.json",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\streams_example.json",
+              "RelativeDocumentMoniker": "streams_example.json",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\streams_example.json",
+              "RelativeToolTip": "streams_example.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-05T14:50:46.183Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "StreamsDatPatcher.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Services\\StreamsDatPatcher.cs",
+              "RelativeDocumentMoniker": "Services\\StreamsDatPatcher.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Services\\StreamsDatPatcher.cs",
+              "RelativeToolTip": "Services\\StreamsDatPatcher.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:37:55.871Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "StreamInfo.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Models\\StreamInfo.cs",
+              "RelativeDocumentMoniker": "Models\\StreamInfo.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Models\\StreamInfo.cs",
+              "RelativeToolTip": "Models\\StreamInfo.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAiwGIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:27:44.671Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "StreamsData.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Models\\StreamsData.cs",
+              "RelativeDocumentMoniker": "Models\\StreamsData.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\Models\\StreamsData.cs",
+              "RelativeToolTip": "Models\\StreamsData.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAIBZwBIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:27:49.596Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "RelayCommand.cs",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\ViewModels\\RelayCommand.cs",
+              "RelativeDocumentMoniker": "ViewModels\\RelayCommand.cs",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\ViewModels\\RelayCommand.cs",
+              "RelativeToolTip": "ViewModels\\RelayCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:27:58.562Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\App.xaml",
+              "RelativeDocumentMoniker": "App.xaml",
+              "ToolTip": "C:\\Users\\Erik\\source\\repos\\MidnightClub3AudioModder\\App.xaml",
+              "RelativeToolTip": "App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-05T14:26:47.43Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "plan-589f217a-c201-4c5b-b6aa-83cd780e671f.md",
+              "DocumentMoniker": "C:\\Users\\Erik\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-589f217a-c201-4c5b-b6aa-83cd780e671f.md",
+              "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-589f217a-c201-4c5b-b6aa-83cd780e671f.md",
+              "ToolTip": "C:\\Users\\Erik\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-589f217a-c201-4c5b-b6aa-83cd780e671f.md [Somente Leitura]",
+              "RelativeToolTip": "..\\..\\..\\AppData\\Local\\Temp\\VisualStudio\\copilot-vs\\plan-589f217a-c201-4c5b-b6aa-83cd780e671f.md [Somente Leitura]",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-01-05T14:20:17.679Z",
+              "EditorCaption": " [Somente Leitura]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

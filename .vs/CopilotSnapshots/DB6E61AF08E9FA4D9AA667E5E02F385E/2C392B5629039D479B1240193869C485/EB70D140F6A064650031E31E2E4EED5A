@@ -1,0 +1,23 @@
+﻿using System.Runtime.Serialization;
+
+namespace MidnightClub3AudioModder.Models
+{
+    [DataContract]
+    public sealed class StreamEntry
+    {
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "offset")]
+        public string Offset { get; set; }
+
+        [DataMember(Name = "offset_decimal")]
+        public long OffsetDecimal { get; set; }
+
+        [DataMember(Name = "size")]
+        public long Size { get; set; }
+
+        [DataMember(Name = "size_hex")]
+        public string SizeHex { get; set; }
+    }
+}

@@ -1,0 +1,105 @@
+﻿# Midnight Club 3 - Audio Stream Modder
+
+## 📋 Descrição
+Aplicativo para visualizar, editar, substituir e reproduzir streams de áudio do arquivo `streams.dat` do jogo Midnight Club 3.
+
+## 🚀 Como Usar
+
+### Arquivos Necessários
+Coloque os seguintes arquivos na mesma pasta do executável:
+
+1. **streams_streams.json** ou **streams.json** - Mapa das streams (carregado automaticamente)
+2. **streams.dat** - Arquivo de dados das streams (carregado automaticamente se encontrado)
+3. **vgmstream-cli.exe** - Conversor de áudio para reprodução (necessário para tocar streams)
+
+### Funcionalidades
+
+#### 🎵 Reproduzir Stream
+1. Selecione uma stream na lista
+2. Clique em "▶️ Tocar Stream"
+3. O aplicativo irá:
+   - Extrair a stream para `temporario.rsm`
+   - Converter para `temporario.rsm.wav` usando `vgmstream-cli.exe`
+   - Reproduzir o áudio automaticamente
+   - Limpar os arquivos temporários ao finalizar
+
+#### ⏹️ Parar Reprodução
+- Clique em "⏹️ Parar" para interromper a reprodução a qualquer momento
+
+#### 📤 Exportar Stream
+1. Selecione uma stream
+2. Clique em "📤 Exportar Stream"
+3. Escolha o local e nome do arquivo
+4. A stream será salva como arquivo separado
+
+#### 🔄 Substituir Dados
+1. Selecione uma stream
+2. Clique em "🔄 Substituir Dados"
+3. Escolha um arquivo **WAV** para substituir
+4. O aplicativo irá:
+   - Ler o header RSM da stream original (sample rate e canais)
+   - Converter o WAV usando **FFmpeg** para as especificações corretas
+   - Converter para RSM usando o script **Python** (rstm_build.py)
+   - Substituir os dados no offset da stream
+   - Truncar ou preencher com zeros conforme necessário
+5. Os dados serão carregados na memória (não salvos até clicar em Salvar)
+
+**⚠️ Importante:** Este processo requer:
+- `ffmpeg.exe` no diretório do executável
+- `rstm_build.py` no diretório do executável
+- Python instalado no sistema
+
+#### 💾 Salvar Alterações
+1. Após fazer substituições, clique em "💾 Salvar Alterações"
+2. Um backup será criado automaticamente com timestamp
+3. O arquivo `streams.dat` será atualizado
+
+### 🔍 Recursos Adicionais
+
+- **Busca Rápida**: Digite no campo de busca para filtrar streams por nome ou offset
+- **Ordenação Automática**: Streams são exibidas do maior para o menor tamanho
+- **Preview Hex**: Visualize os primeiros 1KB de dados hexadecimais de cada stream
+- **Lista Virtualizada**: Suporta milhares de streams sem travamentos
+
+## 📥 Download do vgmstream-cli
+
+Baixe o vgmstream-cli.exe em: https://github.com/vgmstream/vgmstream/releases
+
+Extraia o arquivo `vgmstream-cli.exe` na mesma pasta do executável do modder.
+
+## ⚠️ Observações
+
+- Sempre faça backup do arquivo `streams.dat` original antes de fazer modificações
+- O aplicativo cria backups automaticamente ao salvar, mas é recomendado manter uma cópia manual
+- Certifique-se de que o `vgmstream-cli.exe` está na pasta correta para reprodução funcionar
+- Os arquivos temporários (temporario.rsm e temporario.rsm.wav) são automaticamente removidos após a reprodução
+
+## 🛠️ Requisitos do Sistema
+
+- Windows 7 ou superior
+- .NET Framework 4.7.2 ou superior
+- vgmstream-cli.exe (para reprodução de áudio)
+
+## 📝 Formato JSON
+
+O arquivo JSON deve seguir este formato:
+
+```json
+{
+  "source_file": "streams.dat",
+  "total_streams": 2213,
+  "streams": [
+    {
+      "name": "stream1",
+      "offset": "0x00006800",
+      "offset_decimal": 26624,
+      "size": 641024,
+      "size_hex": "0x0009C800"
+    }
+  ]
+}
+```
+
+## 🎮 Desenvolvido para Midnight Club 3
+
+Este modder foi desenvolvido especificamente para trabalhar com arquivos de áudio do jogo Midnight Club 3.

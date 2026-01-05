@@ -1,0 +1,13 @@
+﻿namespace MidnightClub3AudioModder.Models
+{
+    public sealed class StreamEntry
+    {
+        public string Name { get; set; }
+
+        public string Offset { get; set; }
+        public long OffsetDecimal { get; set; }
+
+        public long Size { get; set; }
+        public string SizeHex { get; set; }
+    }
+}

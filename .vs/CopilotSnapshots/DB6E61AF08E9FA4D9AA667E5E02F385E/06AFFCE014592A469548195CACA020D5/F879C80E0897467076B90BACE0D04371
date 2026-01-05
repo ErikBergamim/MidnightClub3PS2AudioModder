@@ -1,0 +1,756 @@
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Input;
+using MidnightClub3AudioModder.Models;
+using MidnightClub3AudioModder.Helpers;
+using Microsoft.Win32;
+using System.Diagnostics;
+using System.Media;
+
+namespace MidnightClub3AudioModder.ViewModels
+{
+    public class MainViewModel : INotifyPropertyChanged
+    {
+        private ObservableCollection<StreamInfo> _streams;
+        private StreamInfo _selectedStream;
+        private string _statusMessage;
+        private string _streamsDatPath;
+        private string _jsonConfigPath;
+        private byte[] _streamsDatData;
+        private bool _isDataLoaded;
+        private string _searchText;
+        private bool _isPlaying;
+        private Process _vgmstreamProcess;
+        private SoundPlayer _soundPlayer;
+
+        public ObservableCollection<StreamInfo> Streams
+        {
+            get => _streams;
+            set
+            {
+                _streams = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public StreamInfo SelectedStream
+        {
+            get => _selectedStream;
+            set
+            {
+                _selectedStream = value;
+                OnPropertyChanged();
+                if (_selectedStream != null && _streamsDatData != null)
+                {
+                    LoadStreamData();
+                }
+            }
+        }
+
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set
+            {
+                _statusMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                FilterStreams();
+            }
+        }
+
+        public bool IsDataLoaded
+        {
+            get => _isDataLoaded;
+            set
+            {
+                _isDataLoaded = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsPlaying
+        {
+            get => _isPlaying;
+            set
+            {
+                _isPlaying = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand LoadJsonCommand { get; }
+        public ICommand LoadStreamsDatCommand { get; }
+        public ICommand ReplaceDataCommand { get; }
+        public ICommand ExportStreamCommand { get; }
+        public ICommand SaveChangesCommand { get; }
+        public ICommand PlayStreamCommand { get; }
+        public ICommand StopPlaybackCommand { get; }
+
+        private ObservableCollection<StreamInfo> _allStreams;
+
+        public MainViewModel()
+        {
+            Streams = new ObservableCollection<StreamInfo>();
+            _allStreams = new ObservableCollection<StreamInfo>();
+            
+            LoadJsonCommand = new RelayCommand(LoadJson);
+            LoadStreamsDatCommand = new RelayCommand(LoadStreamsDat);
+            ReplaceDataCommand = new RelayCommand(ReplaceData, CanReplaceData);
+            ExportStreamCommand = new RelayCommand(ExportStream, CanExportStream);
+            SaveChangesCommand = new RelayCommand(SaveChanges, CanSaveChanges);
+            PlayStreamCommand = new RelayCommand(PlayStream, CanPlayStream);
+            StopPlaybackCommand = new RelayCommand(StopPlayback, CanStopPlayback);
+
+            StatusMessage = "Welcome! Load the JSON configuration file to begin.";
+            
+            // Tenta carregar automaticamente se os arquivosexistirem
+            AutoLoadFiles();
+        }
+
+        private void AutoLoadFiles()
+        {
+            try
+            {
+                string exeDir = AppDomain.CurrentDomain.BaseDirectory;
+                
+                // Tenta carregar streams_streams.json primeiro, depois streams.json
+                string jsonPath = Path.Combine(exeDir, "streams_streams.json");
+                if (!File.Exists(jsonPath))
+                {
+                    jsonPath = Path.Combine(exeDir, "streams.json");
+                }
+                
+                string datPath = Path.Combine(exeDir, "streams.dat");
+
+                if (File.Exists(jsonPath))
+                {
+                    _jsonConfigPath = jsonPath;
+                    LoadJsonFromPath(jsonPath);
+                }
+
+                if (File.Exists(datPath) && _allStreams.Count > 0)
+                {
+                    _streamsDatPath = datPath;
+                    LoadStreamsDatFromPath(datPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Auto-load error: {ex.Message}";
+            }
+        }
+
+        private void LoadJson(object parameter)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                Title = "Select JSON configuration file"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                _jsonConfigPath = openFileDialog.FileName;
+                LoadJsonFromPath(openFileDialog.FileName);
+            }
+        }
+
+        private void LoadJsonFromPath(string filePath)
+        {
+            try
+            {
+                string jsonContent = File.ReadAllText(filePath);
+                var streamsData = SimpleJsonParser.Deserialize<StreamsData>(jsonContent);
+
+                _allStreams.Clear();
+                Streams.Clear();
+
+                // Ordena as streams do maior para o menor tamanho
+                var sortedStreams = streamsData.Streams.OrderByDescending(s => s.Size).ToList();
+
+                foreach (var stream in sortedStreams)
+                {
+                    _allStreams.Add(stream);
+                    Streams.Add(stream);
+                }
+
+                StatusMessage = $"JSON loaded: {streamsData.TotalStreams} streams found (sorted by size)";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Error loading JSON: {ex.Message}";
+                MessageBox.Show($"Error loading JSON: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadStreamsDat(object parameter)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "DAT files (*.dat)|*.dat|All files (*.*)|*.*",
+                Title = "Select streams.dat file"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                _streamsDatPath = openFileDialog.FileName;
+                LoadStreamsDatFromPath(openFileDialog.FileName);
+            }
+        }
+
+        private void LoadStreamsDatFromPath(string filePath)
+        {
+            try
+            {
+                _streamsDatData = File.ReadAllBytes(filePath);
+                IsDataLoaded = true;
+                StatusMessage = $"streams.dat loaded: {FormatFileSize(_streamsDatData.Length)}";
+                
+                if (SelectedStream != null)
+                {
+                    LoadStreamData();
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro ao carregar streams.dat: {ex.Message}";
+                MessageBox.Show($"Erro ao carregar streams.dat: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadStreamData()
+        {
+            try
+            {
+                if (_streamsDatData == null || SelectedStream == null) return;
+
+                long offset = SelectedStream.OffsetDecimal;
+                long size = Math.Min(SelectedStream.Size, 1024); // Mostra apenas os primeiros 1KB para preview
+
+                if (offset + size > _streamsDatData.Length)
+                {
+                    StatusMessage = "Offset além do tamanho do arquivo";
+                    return;
+                }
+
+                byte[] data = new byte[size];
+                Array.Copy(_streamsDatData, offset, data, 0, size);
+                SelectedStream.CurrentData = BitConverter.ToString(data).Replace("-", " ");
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro ao ler dados da stream: {ex.Message}";
+            }
+        }
+
+        private bool CanReplaceData(object parameter)
+        {
+            return SelectedStream != null && _streamsDatData != null;
+        }
+
+        private void ReplaceData(object parameter)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "WAV files (*.wav)|*.wav|All files (*.*)|*.*",
+                Title = "Selecione o arquivo WAV para substituir os dados"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    string exeDir = AppDomain.CurrentDomain.BaseDirectory;
+                    string ffmpegPath = Path.Combine(exeDir, "ffmpeg.exe");
+                    string pythonScript = Path.Combine(exeDir, "rstm_build.py");
+
+                    // Verifica se as ferramentas necessárias existem
+                    if (!File.Exists(ffmpegPath))
+                    {
+                        MessageBox.Show("O arquivo ffmpeg.exe não foi encontrado no diretório do executável.", 
+                            "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    if (!File.Exists(pythonScript))
+                    {
+                        MessageBox.Show("O arquivo rstm_build.py não foi encontrado no diretório do executável.", 
+                            "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    StatusMessage = "Lendo informações do header RSM...";
+
+                    // Extrai sample rate e canais do header RSM (offset + 8 bytes)
+                    long headerOffset = SelectedStream.OffsetDecimal + 8;
+                    
+                    if (headerOffset + 8 > _streamsDatData.Length)
+                    {
+                        MessageBox.Show("Offset inválido para leitura do header RSM.", 
+                            "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // Lê os bytes do header (little endian)
+                    byte[] headerBytes = new byte[8];
+                    Array.Copy(_streamsDatData, headerOffset, headerBytes, 0, 8);
+
+                    // Sample rate: 4 bytes em little endian (offset +8 a +11)
+                    int sampleRate = BitConverter.ToInt32(headerBytes, 0);
+                    
+                    // Canais: 2 bytes em little endian (offset +12 a +13)
+                    short channels = BitConverter.ToInt16(headerBytes, 4);
+
+                    StatusMessage = $"Header RSM: {sampleRate}Hz, {channels} canais";
+
+                    // Confirma com o usuário
+                    var confirmResult = MessageBox.Show(
+                        $"Informações detectadas do header RSM:\n\n" +
+                        $"Sample Rate: {sampleRate} Hz\n" +
+                        $"Canais: {channels}\n\n" +
+                        $"O arquivo WAV será convertido para estas especificações.\n\n" +
+                        $"Deseja continuar?",
+                        "Confirmar conversão",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+
+                    if (confirmResult != MessageBoxResult.Yes)
+                        return;
+
+                    // Cria arquivos temporários
+                    string inputWav = openFileDialog.FileName;
+                    string tempConvertedWav = Path.Combine(exeDir, "temp_converted.wav");
+                    string tempRsm = Path.Combine(exeDir, "temp_converted.rsm");
+
+                    // Limpa arquivos temporários anteriores
+                    CleanupTempFiles(tempConvertedWav, tempRsm);
+
+                    StatusMessage = "Convertendo WAV com FFmpeg...";
+
+                    // Passo 1: Converte o WAV usando FFmpeg
+                    var ffmpegArgs = $"-i \"{inputWav}\" -ar {sampleRate} -ac {channels} -c:a pcm_s16le -y \"{tempConvertedWav}\"";
+                    var ffmpegProcess = new ProcessStartInfo
+                    {
+                        FileName = ffmpegPath,
+                        Arguments = ffmpegArgs,
+                        WorkingDirectory = exeDir,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    };
+
+                    using (var process = Process.Start(ffmpegProcess))
+                    {
+                        process.WaitForExit(30000); // Aguarda até 30 segundos
+                        
+                        if (process.ExitCode != 0)
+                        {
+                            string error = process.StandardError.ReadToEnd();
+                            MessageBox.Show($"Erro ao converter WAV com FFmpeg:\n\n{error}", 
+                                "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                            CleanupTempFiles(tempConvertedWav);
+                            return;
+                        }
+                    }
+
+                    if (!File.Exists(tempConvertedWav))
+                    {
+                        MessageBox.Show("FFmpeg não gerou o arquivo WAV convertido.", 
+                            "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    StatusMessage = "Convertendo WAV para RSM com Python...";
+
+                    // Passo 2: Converte para RSM usando Python script
+                    var pythonArgs = $"/C python \"{pythonScript}\" \"{tempConvertedWav}\"";
+                    var pythonProcess = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = pythonArgs,
+                        WorkingDirectory = exeDir,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    };
+
+                    var pythonProc = Process.Start(pythonProcess);
+                    pythonProc.WaitForExit(60000);
+
+                    // O script gera: temp_converted.rsm (NÃO temp_converted.wav.rsm)
+                    string tempRsmGenerated = Path.Combine(exeDir, "temp_converted.rsm");
+                    
+                    if (!File.Exists(tempRsmGenerated))
+                    {
+                        MessageBox.Show("O script Python não gerou o arquivo RSM.\n\n" +
+                            "Verifique se o Python está instalado e o script está correto.", 
+                            "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                        CleanupTempFiles(tempConvertedWav);
+                        return;
+                    }
+
+                    StatusMessage = "Substituindo dados na stream...";
+
+                    // Passo 3: Lê o RSM gerado e substitui no offset
+                    byte[] newRsmData = File.ReadAllBytes(tempRsmGenerated);
+                    
+                    if (newRsmData.Length > SelectedStream.Size)
+                    {
+                        var result = MessageBox.Show(
+                            $"O arquivo RSM gerado ({FormatFileSize(newRsmData.Length)}) é maior que o tamanho da stream ({SelectedStream.SizeFormatted}).\n\n" +
+                            "Deseja continuar? Os dados serão truncados.",
+                            "Aviso",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning);
+
+                        if (result != MessageBoxResult.Yes)
+                        {
+                            CleanupTempFiles(tempConvertedWav, tempRsmGenerated);
+                            return;
+                        }
+
+                        Array.Resize(ref newRsmData, (int)SelectedStream.Size);
+                    }
+                    else if (newRsmData.Length < SelectedStream.Size)
+                    {
+                        var result = MessageBox.Show(
+                            $"O arquivo RSM gerado ({FormatFileSize(newRsmData.Length)}) é menor que o tamanho da stream ({SelectedStream.SizeFormatted}).\n\n" +
+                            "Deseja continuar? Os dados restantes serão preenchidos com zeros.",
+                            "Aviso",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning);
+
+                        if (result != MessageBoxResult.Yes)
+                        {
+                            CleanupTempFiles(tempConvertedWav, tempRsmGenerated);
+                            return;
+                        }
+
+                        byte[] paddedData = new byte[SelectedStream.Size];
+                        Array.Copy(newRsmData, paddedData, newRsmData.Length);
+                        newRsmData = paddedData;
+                    }
+
+                    // Substitui os dados no offset
+                    Array.Copy(newRsmData, 0, _streamsDatData, SelectedStream.OffsetDecimal, newRsmData.Length);
+                    LoadStreamData();
+                    
+                    StatusMessage = $"✅ Stream substituída com sucesso: {SelectedStream.Name}";
+                    MessageBox.Show(
+                        $"Stream substituída com sucesso!\n\n" +
+                        $"Stream: {SelectedStream.Name}\n" +
+                        $"Sample Rate: {sampleRate} Hz\n" +
+                        $"Canais: {channels}\n" +
+                        $"Tamanho: {FormatFileSize(newRsmData.Length)}\n\n" +
+                        $"Não esqueça de salvar as alterações!",
+                        "Sucesso",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    // Limpa arquivos temporários
+                    CleanupTempFiles(tempConvertedWav, tempRsmGenerated);
+                }
+                catch (Exception ex)
+                {
+                    StatusMessage = $"Erro ao substituir dados: {ex.Message}";
+                    MessageBox.Show($"Erro ao substituir dados:\n\n{ex.Message}\n\n{ex.StackTrace}", 
+                        "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private bool CanExportStream(object parameter)
+        {
+            return SelectedStream != null && _streamsDatData != null;
+        }
+
+        private void ExportStream(object parameter)
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "All files (*.*)|*.*",
+                FileName = SelectedStream.Name,
+                Title = "Exportar dados da stream"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    byte[] data = new byte[SelectedStream.Size];
+                    Array.Copy(_streamsDatData, SelectedStream.OffsetDecimal, data, 0, SelectedStream.Size);
+                    File.WriteAllBytes(saveFileDialog.FileName, data);
+                    StatusMessage = $"Stream exportada com sucesso: {saveFileDialog.FileName}";
+                }
+                catch (Exception ex)
+                {
+                    StatusMessage = $"Erro ao exportar stream: {ex.Message}";
+                    MessageBox.Show($"Erro ao exportar stream: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private bool CanPlayStream(object parameter)
+        {
+            return SelectedStream != null && _streamsDatData != null && !IsPlaying;
+        }
+
+        private async void PlayStream(object parameter)
+        {
+            try
+            {
+                IsPlaying = true;
+                StatusMessage = "Preparando reprodução...";
+
+                string exeDir = AppDomain.CurrentDomain.BaseDirectory;
+                string tempRsmPath = Path.Combine(exeDir, "temporario.rsm");
+                string tempWavPath = Path.Combine(exeDir, "temporario.rsm.wav");
+                string vgmstreamPath = Path.Combine(exeDir, "vgmstream-cli.exe");
+
+                // Verifica se o vgmstream-cli.exe existe
+                if (!File.Exists(vgmstreamPath))
+                {
+                    StatusMessage = "Erro: vgmstream-cli.exe não encontrado!";
+                    MessageBox.Show("O arquivo vgmstream-cli.exe não foi encontrado no diretório do executável.\n\n" +
+                        "Baixe em: https://github.com/vgmstream/vgmstream/releases", 
+                        "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    IsPlaying = false;
+                    return;
+                }
+
+                // Extrai a stream para o arquivo temporário
+                byte[] streamData = new byte[SelectedStream.Size];
+                Array.Copy(_streamsDatData, SelectedStream.OffsetDecimal, streamData, 0, SelectedStream.Size);
+                File.WriteAllBytes(tempRsmPath, streamData);
+
+                StatusMessage = "Convertendo stream para WAV...";
+
+                // Remove o arquivo WAV anterior se existir
+                if (File.Exists(tempWavPath))
+                {
+                    File.Delete(tempWavPath);
+                }
+
+                // Executa vgmstream-cli para converter RSM para WAV
+                var processStartInfo = new ProcessStartInfo
+                {
+                    FileName = vgmstreamPath,
+                    Arguments = $"\"{tempRsmPath}\"",
+                    WorkingDirectory = exeDir,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+
+                _vgmstreamProcess = Process.Start(processStartInfo);
+                await System.Threading.Tasks.Task.Run(() => _vgmstreamProcess.WaitForExit(10000)); // Aguarda até 10 segundos
+
+                // Verifica se o arquivo WAV foi criado
+                if (File.Exists(tempWavPath))
+                {
+                    StatusMessage = $"🎵 Reproduzindo: {SelectedStream.Name}";
+                    
+                    // Toca o arquivo WAV de forma assíncrona
+                    _soundPlayer = new SoundPlayer(tempWavPath);
+                    _soundPlayer.Load();
+                    _soundPlayer.Play();
+
+                    // Aguarda a duração estimada do áudio (ou usa timer)
+                    // Nota: SoundPlayer não tem evento de término, então usamos detecção simples
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        // Espera enquanto o processo está tocando
+                        System.Threading.Thread.Sleep(1000);
+                        while (IsPlaying)
+                        {
+                            System.Threading.Thread.Sleep(100);
+                        }
+                    });
+
+                    StatusMessage = $"Reprodução finalizada: {SelectedStream.Name}";
+                    
+                    // Limpa arquivos temporários
+                    CleanupTempFiles(tempRsmPath, tempWavPath);
+                }
+                else
+                {
+                    StatusMessage = "Erro: Falha na conversão para WAV";
+                    MessageBox.Show("Não foi possível converter a stream para WAV.\n\n" +
+                        "Verifique se o formato é suportado pelo vgmstream-cli.", 
+                        "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    
+                    // Limpa arquivo RSM
+                    if (File.Exists(tempRsmPath))
+                        File.Delete(tempRsmPath);
+                }
+
+                IsPlaying = false;
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro ao reproduzir stream: {ex.Message}";
+                MessageBox.Show($"Erro ao reproduzir stream: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                IsPlaying = false;
+            }
+        }
+
+        private bool CanStopPlayback(object parameter)
+        {
+            return IsPlaying;
+        }
+
+        private void StopPlayback(object parameter)
+        {
+            try
+            {
+                // Para o SoundPlayer
+                if (_soundPlayer != null)
+                {
+                    _soundPlayer.Stop();
+                    _soundPlayer.Dispose();
+                    _soundPlayer = null;
+                }
+
+                // Finaliza o processo vgmstream se ainda estiver rodando
+                if (_vgmstreamProcess != null && !_vgmstreamProcess.HasExited)
+                {
+                    _vgmstreamProcess.Kill();
+                    _vgmstreamProcess.Dispose();
+                    _vgmstreamProcess = null;
+                }
+
+                IsPlaying = false;
+                StatusMessage = "Reprodução interrompida";
+
+                // Limpa arquivos temporários
+                string exeDir = AppDomain.CurrentDomain.BaseDirectory;
+                CleanupTempFiles(
+                    Path.Combine(exeDir, "temporario.rsm"),
+                    Path.Combine(exeDir, "temporario.rsm.wav")
+                );
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro ao parar reprodução: {ex.Message}";
+            }
+        }
+
+        private void CleanupTempFiles(params string[] files)
+        {
+            foreach (var file in files)
+            {
+                try
+                {
+                    if (File.Exists(file))
+                    {
+                        File.Delete(file);
+                    }
+                }
+                catch
+                {
+                    // Ignora erros ao limpar arquivos temporários
+                }
+            }
+        }
+
+        private bool CanSaveChanges(object parameter)
+        {
+            return _streamsDatData != null && !string.IsNullOrEmpty(_streamsDatPath);
+        }
+
+        private void SaveChanges(object parameter)
+        {
+            try
+            {
+                var result = MessageBox.Show(
+                    "Deseja salvar as alterações no arquivo streams.dat?\n\n" +
+                    "Um backup será criado automaticamente.",
+                    "Confirmar salvamento",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result != MessageBoxResult.Yes)
+                    return;
+
+                // Criar backup
+                string backupPath = _streamsDatPath + ".backup_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                File.Copy(_streamsDatPath, backupPath, true);
+
+                // Salvar arquivo modificado
+                File.WriteAllBytes(_streamsDatPath, _streamsDatData);
+                
+                StatusMessage = $"Alterações salvas! Backup criado: {Path.GetFileName(backupPath)}";
+                MessageBox.Show("Alterações salvas com sucesso!\n\nBackup criado: " + Path.GetFileName(backupPath), 
+                    "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Erro ao salvar: {ex.Message}";
+                MessageBox.Show($"Erro ao salvar: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void FilterStreams()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                Streams.Clear();
+                foreach (var stream in _allStreams)
+                {
+                    Streams.Add(stream);
+                }
+            }
+            else
+            {
+                var filtered = _allStreams.Where(s => 
+                    s.Name.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    s.Offset.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
+                ).ToList();
+
+                Streams.Clear();
+                foreach (var stream in filtered)
+                {
+                    Streams.Add(stream);
+                }
+            }
+        }
+
+        private string FormatFileSize(long bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB" };
+            double len = bytes;
+            int order = 0;
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len = len / 1024;
+            }
+            return $"{len:0.##} {sizes[order]}";
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}

@@ -1,0 +1,130 @@
+﻿# Fluxo de Substituição de Stream
+
+## Processo Completo de Substituição
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 1. USUÁRIO SELECIONA ARQUIVO WAV                                │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 2. LEITURA DO HEADER RSM DA STREAM ORIGINAL                     │
+│                                                                  │
+│    Offset da Stream + 8 bytes:                                  │
+│    ┌──────────────────────────────────────────┐                │
+│    │ 52 53 54 4D 00 00 00 00 [50 46 00 00]   │ ← Sample Rate  │
+│    │                          [02 00] 00 00   │ ← Canais       │
+│    └──────────────────────────────────────────┘                │
+│                                                                  │
+│    Sample Rate: 0x00004650 (little endian) = 18000 Hz          │
+│    Canais:      0x0002 (little endian) = 2                     │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 3. CONVERSÃO COM FFMPEG                                         │
+│                                                                  │
+│    Comando:                                                      │
+│    ffmpeg -i "input.wav"                                        │
+│           -ar 18000                    ← Sample Rate            │
+│           -ac 2                        ← Canais                 │
+│           -c:a pcm_s16le              ← Codec PCM 16-bit LE    │
+│           -y "temp_converted.wav"                               │
+│                                                                  │
+│    Saída: temp_converted.wav (WAV otimizado)                    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 4. CONVERSÃO PARA RSM COM PYTHON                                │
+│                                                                  │
+│    Comando:                                                      │
+│    python rstm_build.py "temp_converted.wav"                    │
+│                                                                  │
+│    Parâmetros:                                                   │
+│    - temp_converted.wav : Arquivo WAV de entrada                │
+│                                                                  │
+│    Saída automática:                                             │
+│    - temp_converted.wav.rsm (gerado automaticamente)            │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 5. AJUSTE DE TAMANHO                                            │
+│                                                                  │
+│    Se RSM > Tamanho da Stream:                                  │
+│    ┌────────────────────────────────┐                          │
+│    │ Truncar para caber na stream   │                          │
+│    └────────────────────────────────┘                          │
+│                                                                  │
+│    Se RSM < Tamanho da Stream:                                  │
+│    ┌────────────────────────────────┐                          │
+│    │ Preencher com zeros (padding)  │                          │
+│    └────────────────────────────────┘                          │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 6. SUBSTITUIÇÃO NO STREAMS.DAT (EM MEMÓRIA)                     │
+│                                                                  │
+│    streams.dat (bytes):                                         │
+│    ┌──────────────────────────────────────────┐                │
+│    │ ... [Stream Original] ...                │                │
+│    │     ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼                 │                │
+│    │ ... [Novo RSM Convertido] ...            │                │
+│    └──────────────────────────────────────────┘                │
+│           ↑                                                     │
+│      Offset da Stream                                           │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 7. LIMPEZA DE ARQUIVOS TEMPORÁRIOS                              │
+│                                                                  │
+│    Deletados:                                                    │
+│    - temp_converted.wav                                         │
+│    - temp_converted.wav.rsm                                     │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 8. USUÁRIO SALVA ALTERAÇÕES                                     │
+│                                                                  │
+│    - Backup automático criado                                   │
+│    - streams.dat atualizado no disco                            │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Estrutura do Header RSM
+
+```
+Offset  │ Bytes                           │ Descrição
+────────┼─────────────────────────────────┼──────────────────────
++0      │ 52 53 54 4D                     │ Magic "RSTM"
++4      │ 00 00 00 00                     │ Flags/Version
++8      │ 50 46 00 00                     │ Sample Rate (LE)
++12     │ 02 00                           │ Channels (LE)
++14     │ 00 00                           │ Reserved
+```
+
+## Exemplo de Conversão
+
+### Entrada
+- **Arquivo:** musica.wav (44100 Hz, Stereo)
+
+### Stream Original
+- **Sample Rate:** 18000 Hz
+- **Canais:** 2 (Stereo)
+- **Tamanho:** 641024 bytes
+
+### Processo
+1. FFmpeg converte para 18000 Hz, 2 canais, PCM 16-bit LE
+2. Python gera arquivo RSM
+3. RSM é ajustado para 641024 bytes
+4. Substitui no offset da stream
+
+### Resultado
+- ✅ Áudio convertido e compatível
+- ✅ Tamanho ajustado
+- ✅ Pronto para salvar
